@@ -10,3 +10,6 @@ resources = ["a", "b", "c"] # fill this in!
 
 [sources.rest_api.client] # fill this in!
 key = "value"
+
+[github_with_source_secrets]
+repo_name = "dlt-hub/dlt"

@@ -27,17 +27,12 @@ I commented out the github api tutorial and aim to look at that one in the origi
 ## Github issues example
 I've had to blend the tutorials a bit because the github_issues.py script provided is too simplistic and doesn't let you use secrets by default until later in the tutorial, and without that api key you can get rate limited. 
 
-### How to get the more complex github example working
-You need to use a [fine-grained personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token)
-Set this `access_token` in your secrets.toml file. I couldn't find a tutorial for this on DLT but you can look at the `rest_api_pipeline.py` to see the github source has been defined to take an access_key from the secrets file by default
+## Github issues resource and sources example
+A dlt source is a logical grouping of resources. You use it to group resources that belong together, for example, to load data from the same API. Loading data from a source can be run in a single pipeline
 
-### Write disposition
-- [Replacing the data](https://dlthub.com/docs/tutorial/)rest-api#replacing-the-data
-- [Merging the data](https://dlthub.com/docs/tutorial/rest-api#merging-the-data)
-You can set this in the resource_defaults, and a replace definition is clever enough to know to replace existing rows with the new data, avoiding duplicates. It even works if you didn't set this first time, have duplicates, and run it again. It removes them all.
+Generally it looks like you can define a bunch of different resources for a single source, and DLT encourages you to use their building blocks. Generally, you should avoid yielding in sources because they aren't lazily loaded and compile immediately, whereas resources can be yielded. 
 
-- [Loading the data incrementally](https://dlthub.com/docs/tutorial/rest-api#loading-data-incrementally)
-APIs that support incremental loading usually provide a way to fetch only new or changed data (most often by using a timestamp field like updated_at, created_at, or incremental IDs).
+
 
 ## Tips
 Between pipeline runs, dlt keeps the state in the same database it loaded data into. Peek into that state, the tables loaded, and get other information with:
@@ -54,3 +49,20 @@ or
 
 You can find more information on inspecting a pipeline after loading:
 [Inspect a Load Process](https://dlthub.com/docs/walkthroughs/run-a-pipeline#4-inspect-a-load-process)
+
+### How to get the more complex github example working
+You need to use a [fine-grained personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token)
+Set this `access_token` in your secrets.toml file. I couldn't find a tutorial for this on DLT but you can look at the `rest_api_pipeline.py` to see the github source has been defined to take an access_key from the secrets file by default
+
+### Write disposition - [how to choose the right one](https://dlthub.com/docs/general-usage/incremental-loading#how-to-choose-the-right-write-disposition)
+![choose_right_disposition](./choose_right_disposition.png)
+- Stateful data is data that retains information about previous interactions or processing steps in a system
+- [Replacing the data](https://dlthub.com/docs/tutorial/rest-api#replacing-the-data)
+- [Merging the data](https://dlthub.com/docs/tutorial/rest-api#merging-the-data)
+
+You can set this in the resource_defaults, and a replace definition is clever enough to know to replace existing rows with the new data, avoiding duplicates. It even works if you didn't set this first time, have duplicates, and run it again. It removes them all. You just need to be able to give it an *id* on which to merge.
+
+- [Loading the data incrementally](https://dlthub.com/docs/tutorial/rest-api#loading-data-incrementally)
+APIs that support incremental loading usually provide a way to fetch only new or changed data (most often by using a timestamp field like updated_at, created_at, or incremental IDs).
+
+WARNING - I couldn't figure out how to use dynamically created resources for incremental
