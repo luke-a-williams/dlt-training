@@ -25,7 +25,14 @@ I intend to follow the following tutorials today:
 - Make reusable data sources.
 
 
-### Exploring the data
-DLT has streamlit built in, to view a streamlit dashboard of the data for basic exploration, use:
-- `source .venv/bin/activate`
-- `uv run dlt pipeline quick_start show`
+### Load data from RESTful APIs
+Tutorials used:
+[Pokemon tutorial](https://dlthub.com/docs/tutorial/rest-api)
+[Github issues](https://dlthub.com/docs/tutorial/load-data-from-an-api#create-a-pipeline)
+
+- How to set up a REST API source
+- Configuration basics for API endpoints
+- Configuring the destination database
+- Relationships between different resources
+- How to append, replace, and merge data in the destination
+- Loading data incrementally by fetching only new or updated data
